@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "ToobSquid",
+  "version": "0.0.1",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "logo.png"
+  },
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://studio.youtube.com/video/*"]
+    }
+  ]
+}

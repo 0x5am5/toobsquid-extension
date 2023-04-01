@@ -18,49 +18,49 @@ chrome.runtime.onMessage.addListener(async function (
   } else if (request.message === "transcribe") {
     const url = sender.tab ? sender.tab.url : "";
 
-    chrome.storage.local.get(["tb:user"]).then(async (result) => {
-      if (!result["tb:user"].userID) {
-        console.log("user not logged in");
-        sendResponse({ message: "Please login to ToobSquid" });
-        return;
-      }
+    const result = await chrome.storage.local.get(["tb:user"]);
 
-      console.log("transcribing with url: ", url);
+    if (!result["tb:user"].userID) {
+      console.log("user not logged in");
+      sendResponse({ message: "Please login to ToobSquid" });
+      return;
+    }
 
-      // need to replace with live url
-      const response = await fetch(
-        "https://toobsquid-git-development-jupiterandthegiraffe.vercel.app/api/transcribe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            youtubeUrl: url,
-            userID: result["tb:user"].userID,
-            ...(result["tb:user"].tester && {
-              openAIKey: result["tb:user"].openAIKey,
-            }),
-          }),
-        }
-      );
+    console.log("transcribing with url: ", url);
 
-      const data = await response.json();
-
-      console.log(data);
-
-      if (data.status !== 200) {
-        sendResponse({ message: data.message });
-        return;
-      }
-
-      sendResponse({
-        message: {
-          title: data.message.video.title,
-          description: data.message.video.description,
-          hashtags: data.message.video.hashtags,
+    // need to replace with live url
+    const response = await fetch(
+      "https://toobsquid-git-development-jupiterandthegiraffe.vercel.app/api/transcribe",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      });
+        body: JSON.stringify({
+          youtubeUrl: url,
+          userID: result["tb:user"].userID,
+          ...(result["tb:user"].tester && {
+            openAIKey: result["tb:user"].openAIKey,
+          }),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    if (data.status !== 200) {
+      sendResponse({ message: data.message });
+      return;
+    }
+
+    sendResponse({
+      message: {
+        title: data.message.video.title,
+        description: data.message.video.description,
+        hashtags: data.message.video.hashtags,
+      },
     });
   }
 });

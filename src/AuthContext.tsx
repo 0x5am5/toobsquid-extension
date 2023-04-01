@@ -31,8 +31,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const unlisten = onAuthStateChanged(auth, async (authUser: any) => {
       try {
         const setupUser = async (userData: any) => {
-          await logLatestLogin(authUser.uid);
-
           setUser({
             uid: authUser.uid,
             email: authUser.email,
@@ -79,6 +77,19 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       } catch (e) {
         console.log(e);
       } finally {
+        chrome.runtime.sendMessage(
+          {
+            message: authUser?.uid ? "user_logged_in" : "user_logged_out",
+            payload: {
+              userID: authUser?.uid,
+              tester: authUser?.tester,
+              openAIKey: authUser?.openAIKey,
+            },
+          },
+          (response) => {
+            console.log(response);
+          }
+        );
         setLoading(false);
       }
     });

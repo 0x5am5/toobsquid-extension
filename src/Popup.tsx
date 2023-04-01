@@ -55,58 +55,6 @@ export default function Popup() {
     }
   };
 
-  useEffect(() => {
-    chrome.runtime.onMessage.addListener(async function (
-      request,
-      sender,
-      sendResponse
-    ) {
-      const url = sender.tab ? sender.tab.url : "";
-
-      if (user.tester && !user.openAiKey) {
-        return alert("You need to add an OpenAI key to your account.");
-      }
-
-      if (user.uid && url) {
-        console.log(url.replace(/video\/(.+)\/edit/, "video/$1"));
-        const response = await fetch(
-          "https://toobsquid-git-development-jupiterandthegiraffe.vercel.app/api/transcribe",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              youtubeUrl: url.replace(/video\/(.+)\/edit/, "video/$1"),
-              userID: user.uid,
-              ...(user.tester && { openAIKey: user.openAiKey }),
-            }),
-          }
-        );
-
-        const data = await response.json();
-
-        console.log(data);
-        if (data.status !== 200) {
-          throw data.message;
-        }
-
-        const newTitles = {
-          title: data.message.video.title,
-          description: data.message.video.description,
-          hashtags: data.message.video.hashtags,
-          thumbnail: data.message.video.thumbnail,
-          date: data.message.video.date,
-          timeStamp: data.message.video.timeStamp,
-          timeStamps: data.message.video.timeStamps,
-          url: data.message.video.url,
-        };
-      }
-
-      if (request.greeting === "hello") sendResponse({ farewell: "goodbye" });
-    });
-  }, []);
-
   return (
     <main className="p-3">
       <h1 className="text-3xl mb-9 text-center font-bold">ToobSquid</h1>

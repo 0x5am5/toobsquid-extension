@@ -12,6 +12,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  signInWithCredential,
 } from "firebase/auth";
 import { auth, db, provider } from "./firebase";
 import { useFirestore } from "./FirestoreContext";
@@ -77,6 +78,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       } catch (e) {
         console.log(e);
       } finally {
+        console.log(authUser);
+
         chrome.runtime.sendMessage(
           {
             message: authUser?.uid ? "user_logged_in" : "user_logged_out",
@@ -113,22 +116,24 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithGoogle = () =>
     new Promise((resolve, reject) => {
-      signInWithPopup(auth, provider)
-        .then(async (result: any) => {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          const user = result.user;
+      chrome.identity.getAuthToken({ interactive: true }, (token) => {
+        if (chrome.runtime.lastError || !token) {
+          alert(
+            `SSO ended with an error: ${JSON.stringify(
+              chrome.runtime.lastError
+            )}`
+          );
+          return;
+        }
 
-          resolve(result);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          const email = error.customData.email;
-          const credential = GoogleAuthProvider.credentialFromError(error);
-          reject(error);
-        });
+        signInWithCredential(auth, GoogleAuthProvider.credential(null, token))
+          .then((res) => {
+            resolve("signed in!");
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     });
 
   const passwordReset = (email: string) => sendPasswordResetEmail(auth, email);

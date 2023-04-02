@@ -18,37 +18,31 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const result = await chrome.storage.local.get(["tb:user"]);
 
       if (!result["tb:user"].userID) {
-        console.log("user not logged in");
         sendResponse({ message: "Please login to ToobSquid" });
+        reject();
         return;
       }
 
-      console.log("transcribing with url: ", url);
-
       // need to replace with live url
-      const response = await fetch(
-        "https://toobsquid-git-development-jupiterandthegiraffe.vercel.app/api/transcribe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            youtubeUrl: url,
-            userID: result["tb:user"].userID,
-            ...(result["tb:user"].tester && {
-              openAIKey: result["tb:user"].openAIKey,
-            }),
+      const response = await fetch("https://ai.toobsquid.com/api/transcribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          youtubeUrl: url,
+          userID: result["tb:user"].userID,
+          ...(result["tb:user"].tester && {
+            openAIKey: result["tb:user"].openAIKey,
           }),
-        }
-      );
+        }),
+      });
 
       const data = await response.json();
 
-      console.log(data);
-
       if (data.status !== 200) {
         sendResponse({ message: data.message });
+        reject();
         return;
       }
 
@@ -64,4 +58,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     resolve();
   });
   return true;
+});
+
+chrome.runtime.onInstalled.addListener(function (object) {
+  let internalUrl = chrome.runtime.getURL("onboarding.html");
+
+  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.tabs.create({ url: internalUrl });
+  }
 });

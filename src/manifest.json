@@ -1,7 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "ToobSquid",
-  "version": "0.0.1",
+  "name": "ToobSquid: AI Youtube Titles and Descriptions",
+  "version": "1.0.0",
+  "description": "An AI tool that automatically generates YouTube titles and descriptions for your videos. It's free, fast, and easy to use.",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "action": {
     "default_popup": "index.html",
     "default_icon": "logo.png"
@@ -9,13 +16,18 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "identity"],
   "content_scripts": [
     {
       "js": ["content.js"],
+      "css": ["background.css"],
       "matches": ["https://studio.youtube.com/*"]
     }
   ],
+  "oauth2": {
+    "client_id": "971484684869-ovtjs2me0tfg8hn2l2jhofns2jq6mrk0.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email"]
+  },
   "host_permissions": [
     "https://toobsquid-git-development-jupiterandthegiraffe.vercel.app/",
     "https://toobsquid.vercel.app/",

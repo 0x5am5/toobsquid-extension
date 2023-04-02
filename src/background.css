@@ -1,0 +1,31 @@
+#ToobSquidBtn {
+  padding: .5em 1em;
+  background: rgb(109, 40, 217);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+#ToobSquidBtn:hover,
+#ToobSquidBtn:focus {
+  background: rgb(76, 29, 149);
+}
+
+#ToobSquidBtn.generating {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background: rgb(109, 40, 217);
+  }
+
+  50% {
+    background: rgb(76, 29, 149);
+  }
+
+  100% {
+    background: rgb(109, 40, 217);
+  }
+}

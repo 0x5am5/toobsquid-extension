@@ -25,32 +25,43 @@
       class="bg-black text-white min-h-screen flex items-center justify-center relative"
     >
       <div class="z-50">
-        <h1 class="text-5xl font-bold text-center my-9 relative z-20">
+        <h1 class="text-5xl font-bold text-center mb-9 pt-3 relative z-20">
           ToobSquid AI
 
           <span class="block text-2xl">Chrome Extension</span>
         </h1>
-        <div class="text-center bg-violet-600 rounded-md px-6 py-12">
-          <p class="">
+        <div class="text-center bg-violet-600 rounded-md px-6 py-6">
+          <p class="text-xl font-bold">
+            Upload your video, set to unlisted
+            <span class="block"> and watch the magic happen!</span>
+          </p>
+
+          <img
+            src="screenshot.jpg"
+            alt=""
+            width="1000"
+            class="mt-6 mx-auto align-middle rounded-md"
+          />
+
+          <p class="text-sm mt-6 italic">
             If you don't already have a ToobSquid account, create one at
             <a
               href="https:/ai.toobsquid.com/signup"
               target="_blank"
               class="underline hover:no-underline focus:no-underline"
-              >toobsquid.com</a
+              >ai.toobsquid.com</a
             >.
           </p>
-
-          <p>Next, open the extensions manager and pin Toobsquid and log in!</p>
         </div>
       </div>
 
       <div
-        class="absolute right-6 top-6 z-50 bg-neutral-800 p-6 rounded-md shadow-md flex items-center max-w-sm gap-3"
+        class="absolute right-6 top-6 z-50 bg-neutral-800 p-6 rounded-md shadow-md flex items-center max-w-sm gap-3 transition-all opacity-0 -translate-x-10"
+        id="popup"
       >
         <ul class="list-disc ml-3">
           <li>Open the extensions manager</li>
-          <li>Pin <span class="font-bold">Toobsquid</span></li>
+          <li>📍 <span class="font-bold">Toobsquid</span></li>
           <li>Log in!</li>
         </ul>
 
@@ -101,5 +112,11 @@
         />
       </video>
     </main>
+
+    <script>
+      setTimeout(() => {
+        document.getElementById("popup").style = "opacity: 1; transform: none";
+      }, 500);
+    </script>
   </body>
 </html>

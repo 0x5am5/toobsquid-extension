@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "js": ["content.js"],
-      "matches": ["https://studio.youtube.com/video/*"]
+      "matches": ["https://studio.youtube.com/*"]
     }
   ],
   "host_permissions": [

@@ -1,11 +1,11 @@
 {
   "name": "toobsquid-extension",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "source": "src/index.html",
   "scripts": {
     "start": "parcel watch src/manifest.json --host localhost --config @parcel/config-webextension",
-    "build": "parcel build src/manifest.json --config @parcel/config-webextension"
+    "build": "parcel build src/manifest.json --config @parcel/config-webextension && cp -r src/static/* dist/"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "author": "",
@@ -26,6 +26,11 @@
   "devDependencies": {
     "@types/chrome": "^0.0.227",
     "parcel": "^2.8.3",
+    "parcel-plugin-static-files-copy": "^2.6.0",
+    "parcel-reporter-static-files-copy": "^1.5.0",
     "process": "^0.11.10"
+  },
+  "staticFiles": {
+    "staticPath": "onboarding.html"
   }
 }

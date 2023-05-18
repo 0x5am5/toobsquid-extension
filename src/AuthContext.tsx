@@ -10,11 +10,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   GoogleAuthProvider,
-  signInWithPopup,
   sendPasswordResetEmail,
   signInWithCredential,
 } from "firebase/auth";
-import { auth, db, provider } from "./firebase";
+import { auth, db } from "./firebase";
 import { useFirestore } from "./FirestoreContext";
 import { doc, onSnapshot } from "firebase/firestore";
 
@@ -23,7 +22,7 @@ const AuthContext = createContext<any>({});
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const { getUser, logLatestLogin, updateAccountDetails } = useFirestore();
+  const { getUser, updateAccountDetails } = useFirestore();
   const [user, setUser] = useState<any>("loading");
   const [loading, setLoading] = useState(true);
 

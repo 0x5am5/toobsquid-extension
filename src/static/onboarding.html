@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="onboarding.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,7 +30,7 @@
 
           <span class="block text-2xl">Chrome Extension</span>
         </h1>
-        <div class="text-center bg-violet-600 rounded-md px-6 py-6">
+        <div class="text-center bg-violet-600 rounded-md px-9 py-9">
           <p class="text-xl font-bold">
             Upload your video, set to unlisted
             <span class="block"> and watch the magic happen!</span>
@@ -56,7 +56,8 @@
       </div>
 
       <div
-        class="absolute right-6 top-6 z-50 bg-neutral-800 p-6 rounded-md shadow-md flex items-center max-w-sm gap-3 transition-all opacity-0 -translate-x-10"
+        class="absolute right-3 top-3 z-50 bg-neutral-800 p-6 text-lg rounded-md shadow-md flex items-center max-w-sm gap-3 transition-all opacity-0"
+        style="transform: translateX(-100px)"
         id="popup"
       >
         <ul class="list-disc ml-3">
@@ -113,10 +114,6 @@
       </video>
     </main>
 
-    <script>
-      setTimeout(() => {
-        document.getElementById("popup").style = "opacity: 1; transform: none";
-      }, 500);
-    </script>
+    <script src="onboarding.js"></script>
   </body>
 </html>

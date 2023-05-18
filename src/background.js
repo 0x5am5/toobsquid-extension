@@ -15,44 +15,53 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     } else if (request.message === "transcribe") {
       const url = sender.tab ? sender.tab.url : "";
 
-      const result = await chrome.storage.local.get(["tb:user"]);
+      try {
+        const result = await chrome.storage.local.get(["tb:user"]);
 
-      if (!result["tb:user"].userID) {
-        sendResponse({ message: "Please login to ToobSquid" });
+        if (!result["tb:user"].userID) {
+          sendResponse({ message: "Please login to ToobSquid" });
+          reject();
+          return;
+        }
+
+        // need to replace with live url
+        const response = await fetch(
+          "https://ai.toobsquid.com/api/transcribe",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              youtubeUrl: url,
+              userID: result["tb:user"].userID,
+              ...(result["tb:user"].tester && {
+                openAIKey: result["tb:user"].openAIKey,
+              }),
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.status !== 200) {
+          sendResponse({ message: data.message });
+          reject();
+          return;
+        }
+
+        sendResponse({
+          message: {
+            title: data.message.video.title,
+            description: data.message.video.description,
+            hashtags: data.message.video.hashtags,
+          },
+        });
+      } catch (error) {
+        sendResponse({ message: error.message });
         reject();
         return;
       }
-
-      // need to replace with live url
-      const response = await fetch("https://ai.toobsquid.com/api/transcribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          youtubeUrl: url,
-          userID: result["tb:user"].userID,
-          ...(result["tb:user"].tester && {
-            openAIKey: result["tb:user"].openAIKey,
-          }),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.status !== 200) {
-        sendResponse({ message: data.message });
-        reject();
-        return;
-      }
-
-      sendResponse({
-        message: {
-          title: data.message.video.title,
-          description: data.message.video.description,
-          hashtags: data.message.video.hashtags,
-        },
-      });
     }
 
     resolve();

@@ -5,5 +5,9 @@
       "...",
       "@parcel/transformer-svg-react"
     ]
-  }
+  },
+  "reporters": [
+    "...",
+    "parcel-reporter-static-files-copy"
+  ]
 }

@@ -55,6 +55,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             title: data.message.video.title,
             description: data.message.video.description,
             hashtags: data.message.video.hashtags,
+            timeStamps: data.message.video.timeStamps,
           },
         });
       } catch (error) {

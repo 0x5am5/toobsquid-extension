@@ -19,6 +19,11 @@ const firebaseConfig = {
 };
 
 // Dev
+/*
+ * If you use DEV credentials, you'll need to change
+ * the API endpoint to a dev as by default this calls
+ * production
+*/
 // const firebaseConfig = {
 //   apiKey: "AIzaSyD4VkB9FjrX0Cz4jnWsN8OFuq3Vowmfg3o",
 //   authDomain: "gpt-cockney-rhyming-slan-802b8.firebaseapp.com",
